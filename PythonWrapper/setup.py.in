@@ -1,0 +1,54 @@
+from distutils.core import setup
+from distutils.extension import Extension
+from Cython.Distutils import build_ext
+from Cython.Build import cythonize
+import numpy
+import sys
+import os
+import glob
+import eigency
+import re
+from pprint import pprint
+
+def fileparts(path):
+    """Return parts (dir, name, ext) of full *path* to file.
+    """
+    fdir, fname = os.path.split(path)
+    fname, fext = os.path.splitext(fname)
+    return fdir, fname, fext
+
+
+prefix = '${CMAKE_INSTALL_PREFIX}'
+lib_folder = os.path.join(prefix, 'lib')
+package_dir = {'': '${CMAKE_CURRENT_SOURCE_DIR}'},
+include_dirs = ['${CMAKE_CURRENT_SOURCE_DIR}'] \
+    + '${CPD_INCLUDE_DIRECTORIES}'.split(';') \
+    + [numpy.get_include()] + eigency.get_includes(include_eigen=False)
+sources = ['${CMAKE_CURRENT_SOURCE_DIR}/cpd_lib.pyx']
+libraries = '${CPD_LIBRARIES}'.split(';')
+
+library_dirs, library_names, library_exts = zip(*[fileparts(fn) for fn in libraries])
+library_dirs = list(set([lib for lib in library_dirs if lib]))
+library_names = [lib for lib in library_names if lib]
+
+#pprint(include_dirs)
+#pprint(libraries)
+
+setup(
+    name='cpd_lib',
+    cmdclass={'build_ext': build_ext},
+    version='${PACKAGE_VERSION}',
+    package_dir=package_dir,
+    ext_modules=cythonize(
+        Extension(
+            "cpd_lib",
+            extra_compile_args=['/Od', '/Ob1', '/EHsc', '/Zi', ],
+            extra_link_args=['/DEBUG'],
+            sources=sources,
+            language="c++",
+            include_dirs=include_dirs,
+            library_dirs=library_dirs,
+            libraries=library_names,
+        )
+    )
+)
