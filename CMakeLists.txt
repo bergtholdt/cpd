@@ -99,7 +99,14 @@ endif()
 
 
 # Install
-install(TARGETS Library-C++ DESTINATION lib EXPORT cpd-targets)
+install(
+    TARGETS Library-C++ 
+    EXPORT cpd-targets
+    RUNTIME DESTINATION bin 
+    LIBRARY DESTINATION lib 
+    ARCHIVE DESTINATION lib 
+    INCLUDES DESTINATION include/cpd
+    )
 install(DIRECTORY include/cpd DESTINATION include)
 install(EXPORT cpd-targets NAMESPACE Cpd:: DESTINATION lib/cmake/cpd)
 

@@ -2,43 +2,55 @@ import numpy as np
 cimport numpy as np  # for np.ndarray
 from libc.string cimport memcpy
 from libcpp.string cimport string
-from eigency.core cimport ndarray_copy, ndarray
+from eigency.core cimport ndarray_copy, ndarray, Map
+#from _cpd cimport Transform, Matrix, Result, Value, get_json, Rigid, Affine, to_json
+from _cpd cimport Transform, Matrix, Result, Rigid, Affine, Value, to_json, get_json
 
 cdef class CPD:
-    cdef cpd::Transform *trans
-    cdef cpd::Matrix *fixed 
-    cdef cpd::Matrix *moving 
-    cdef cpd::Result result
+    cdef np.ndarray _fixed
+    cdef np.ndarray _moving 
+    cdef Result _result
 
-    def __cinit__(self, fixed=np.ndarray[np.float32_t, ndim=2], moving=np.ndarray[np.float32_t, ndim=2]):
-        self.fixed = fixed
-        self.moving = moving        
+    def __cinit__(self, np.ndarray[np.float64_t, ndim=2, mode ='c'] fixed=None, np.ndarray[np.float64_t, ndim=2, mode ='c'] moving=None):
+        if fixed is not None:
+            self._fixed = fixed
+        if moving is not None:
+            self._moving = moving
 
-    def __dealloc__(self):
-        del self.trans
-        del self.fixed
-        del self.moving
-
-    def rigid(reflections=False, scale=False):
-        cdef rigid = new Rigid()
+    def rigid(self, reflections=False, scale=False):
+        cdef Rigid rigid = Rigid()
+        print(1)
         rigid.scale(scale)
+        print(2)
         rigid.reflections(reflections)
-        del self.trans
-        self.trans = rigid
-        self.result = self.trans.run(self.fixed, self.moving)
+        print(3)
+        self._result = rigid.run(Map[Matrix](self._fixed),
+                                 Map[Matrix](self._moving))
+        print(4)
 
-    def affine(linked=True):
-        cdef affine = new Affine()
+    def affine(self, linked=True):
+        cdef Affine affine = Affine()
         affine.linked(linked)
-        del self.trans
-        self.trans = affine
-        self.result = self.trans.run(self.fixed, self.moving)
+        self._result = affine.run(Map[Matrix](self._fixed), Map[Matrix](self._moving))
+
+    property fixed:
+        def __get__(self):
+            return self._fixed
+
+        def __set__(self, np.ndarray[np.float64_t, ndim=2] fixed):
+            self._fixed = fixed
+
+    property moving:
+        def __get__(self):
+            return self._moving
+
+        def __set__(self, np.ndarray[np.float64_t, ndim=2] moving):
+            self._moving = moving
 
     property result:
         def __get__(self):
-            cdef Json::Value val = cpd::to_json(self._trans.result)            
-            cdef Json::StreamWriterBuilder builder
-            cdef string res = Json::writeString(builder, val)
+            cdef Value val = to_json(self._result)
+            cdef string res = get_json(val)
             return res
 
         # def __set__(self, args):

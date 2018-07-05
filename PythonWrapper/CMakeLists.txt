@@ -10,6 +10,10 @@ find_program(PYTHON_EXECUTABLE "python" HINTS "${CMAKE_INSTALL_PREFIX}/..")
 
 find_package(Cpd REQUIRED)
 
+if("${CPD_WITH_JSONCPP}")
+    find_package(Cpd COMPONENTS jsoncpp)
+endif()
+
 if (PYTHON_EXECUTABLE)
     set(SETUP_PY_IN "${CMAKE_CURRENT_SOURCE_DIR}/setup.py.in")
     set(SETUP_PY_MID "${CMAKE_CURRENT_BINARY_DIR}/setup.py.mid")
@@ -18,10 +22,10 @@ if (PYTHON_EXECUTABLE)
     set(OUTPUT      "${CMAKE_CURRENT_BINARY_DIR}/build/timestamp")
 
     # wrapper has same dependencies as geometry_common_cpd
-    get_target_property(CPD_INCLUDE_DIRECTORIES NoClick::geometry_common_cpd INTERFACE_INCLUDE_DIRECTORIES)
-    get_target_property(CPD_DEPS NoClick::geometry_common_cpd INTERFACE_LINK_LIBRARIES)
+    get_target_property(CPD_INCLUDE_DIRECTORIES Cpd::Library-C++ INTERFACE_INCLUDE_DIRECTORIES)
+    get_target_property(CPD_DEPS Cpd::Jsoncpp INTERFACE_LINK_LIBRARIES)
 
-    set(CPD_DEPS ${CPD_DEPS} Cpd::Library-C++)
+    set(CPD_DEPS ${CPD_DEPS} Cpd::Library-C++ Cpd::Jsoncpp)
 
     # resolve targets vs. libraries 
     # todo: might be necessary to have that recursively

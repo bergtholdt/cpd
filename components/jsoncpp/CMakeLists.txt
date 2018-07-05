@@ -12,7 +12,12 @@ target_include_directories(Jsoncpp
     )
 target_compile_definitions(Jsoncpp PUBLIC CPD_WITH_JSONCPP)
 
-install(TARGETS Jsoncpp DESTINATION lib EXPORT cpd-jsoncpp-targets)
+install(TARGETS Jsoncpp 
+    EXPORT cpd-jsoncpp-targets
+    RUNTIME DESTINATION bin 
+    LIBRARY DESTINATION lib 
+    ARCHIVE DESTINATION lib 
+)
 install(DIRECTORY include/cpd DESTINATION include)
 install(EXPORT cpd-jsoncpp-targets NAMESPACE Cpd:: DESTINATION lib/cmake/cpd)
 

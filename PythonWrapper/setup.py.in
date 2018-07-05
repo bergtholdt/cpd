@@ -24,7 +24,7 @@ package_dir = {'': '${CMAKE_CURRENT_SOURCE_DIR}'},
 include_dirs = ['${CMAKE_CURRENT_SOURCE_DIR}'] \
     + '${CPD_INCLUDE_DIRECTORIES}'.split(';') \
     + [numpy.get_include()] + eigency.get_includes(include_eigen=False)
-sources = ['${CMAKE_CURRENT_SOURCE_DIR}/cpd_lib.pyx']
+sources = ['${CMAKE_CURRENT_SOURCE_DIR}/_cpd.pyx']
 libraries = '${CPD_LIBRARIES}'.split(';')
 
 library_dirs, library_names, library_exts = zip(*[fileparts(fn) for fn in libraries])
