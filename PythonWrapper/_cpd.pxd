@@ -47,10 +47,11 @@ cdef extern from "cpd/affine.hpp" namespace "cpd":
         #AffineResult run(Matrix fixed, Matrix moving) except +
 
 cdef extern from "cpd/nonrigid.hpp" namespace "cpd":
-    cppclass NonrigidResult:
+    cppclass NonrigidResult(Result):
         pass
 
-    cppclass Nonrigid:
+    cppclass Nonrigid(Transform[NonrigidResult]):
+        Nonrigid()
         Nonrigid& linked(bool linked)
         Nonrigid& beta(double beta)
         Nonrigid& c_lambda "lambda"(double lam)
