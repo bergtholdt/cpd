@@ -29,10 +29,7 @@ libraries = '${CPD_LIBRARIES}'.split(';')
 
 library_dirs, library_names, library_exts = zip(*[fileparts(fn) for fn in libraries])
 library_dirs = list(set([lib for lib in library_dirs if lib]))
-if sys.platform == 'win32':
-    library_names = [lib for lib in library_names if lib]
-else:
-    library_names = [lib[3:] if lib.startswith('lib') else lib for lib in library_names if lib]
+library_names = [lib for lib in library_names if lib]
 
 if sys.platform == 'win32':
     extra_compile_args=['/Od', '/Ob1', '/EHsc', '/Zi', '/DRDI_DLL']
