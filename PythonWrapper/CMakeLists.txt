@@ -18,7 +18,7 @@ if (PYTHON_EXECUTABLE)
     set(SETUP_PY_IN "${CMAKE_CURRENT_SOURCE_DIR}/setup.py.in")
     set(SETUP_PY_MID "${CMAKE_CURRENT_BINARY_DIR}/setup.py.mid")
     set(SETUP_PY    "${CMAKE_CURRENT_BINARY_DIR}/setup.py")
-    set(DEPS        "${CMAKE_CURRENT_SOURCE_DIR}/module/__init__.py")
+    set(DEPS        "${CMAKE_CURRENT_SOURCE_DIR}/_cpd.pyx;${CMAKE_CURRENT_SOURCE_DIR}/_cpd.pxd;${CMAKE_CURRENT_SOURCE_DIR}/cpd_util.h")
     set(OUTPUT      "${CMAKE_CURRENT_BINARY_DIR}/build/timestamp")
 
     # wrapper has same dependencies as geometry_common_cpd
@@ -67,4 +67,6 @@ if (PYTHON_EXECUTABLE)
     add_custom_target(PythonWrapper ALL DEPENDS ${OUTPUT})
 
     install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} ${SETUP_PY} install --single-version-externally-managed --record record.txt)")
-endif()
+else(PYTHON_EXECUTABLE)
+    message(ERROR "No Python Found.")
+endif(PYTHON_EXECUTABLE)
