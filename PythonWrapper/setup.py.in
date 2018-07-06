@@ -45,13 +45,13 @@ else:
 #pprint(libraries)
 
 setup(
-    name='cpd_lib',
+    name='cpd',
     cmdclass={'build_ext': build_ext},
     version='${PACKAGE_VERSION}',
     package_dir=package_dir,
     ext_modules=cythonize(
         Extension(
-            "cpd_lib",
+            "cpd",
             extra_compile_args=extra_compile_args,
             extra_link_args=extra_link_args,
             sources=sources,
