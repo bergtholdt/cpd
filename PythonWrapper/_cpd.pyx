@@ -39,14 +39,14 @@ cdef class CPD:
         cdef string result = get_json(val)
         return json.loads(result)
 
-    def nonrigid(self, linked=None, beta=None, lambda=None):
+    def nonrigid(self, linked=None, beta=None, lambd=None):
         cdef Nonrigid nonrigid = Nonrigid()
         if linked is not None:
             nonrigid.linked(linked)
         if beta is not None:
             nonrigid.beta(beta)
-        if lambda is not None:
-            nonrigid.c_lambda(lambda)
+        if lambd is not None:
+            nonrigid.c_lambda(lambd)
         cdef NonrigidResult res = nonrigid.run(Map[Matrix](self._fixed), Map[Matrix](self._moving))
         cdef Value val = to_json(res)
         cdef string result = get_json(val)
