@@ -56,8 +56,7 @@ if (PYTHON_EXECUTABLE)
 
     # configure the intermediate setup.py.mid with 
     configure_file(${SETUP_PY_IN} ${SETUP_PY_MID})
-    file(GENERATE OUTPUT ${SETUP_PY} INPUT ${SETUP_PY_MID}
-        CONDITION $<CONFIG:RelWithDebInfo>)
+    file(GENERATE OUTPUT ${SETUP_PY} INPUT ${SETUP_PY_MID})
 
     add_custom_command(OUTPUT ${OUTPUT}
                        COMMAND ${PYTHON_EXECUTABLE} ${SETUP_PY} build_ext
