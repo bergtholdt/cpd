@@ -20,6 +20,12 @@ if(POLICY CMP0054) # Quoted variables in if statements
     cmake_policy(SET CMP0054 NEW)
 endif()
 
+FIND_PACKAGE(OpenMP)
+IF(OPENMP_FOUND)
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+ELSE()
+  MESSAGE(STATUS "no OpenMP support found")
+ENDIF()
 
 # Upstream
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
