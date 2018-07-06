@@ -51,8 +51,9 @@ cdef extern from "cpd/nonrigid.hpp" namespace "cpd":
         pass
 
     cppclass Nonrigid:
+        Nonrigid& linked(bool linked)
         Nonrigid& beta(double beta)
-#        Nonrigid& lambda(double lambda)
+        Nonrigid& c_lambda "lambda"(double lam)
 
 cdef extern from "json/value.h" namespace "Json":
     cppclass Value:
